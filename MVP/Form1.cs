@@ -1,4 +1,7 @@
+using MVP.Class;
+using System.Numerics;
 using static MVP.Form1;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace MVP
 {
@@ -7,7 +10,8 @@ namespace MVP
         private List<string> _teamsName = new List<string>();
         private List<string> _sportsName = new List<string>();
         List<string> _matchBestPlayer = new List<string>();
-        List<PlayerInfo> _players = new List<PlayerInfo>();
+        List<Dictionary<string, int>> _teamScore = new List<Dictionary<string, int>>();
+
         public Form1()
         {
             InitializeComponent();
@@ -46,12 +50,16 @@ namespace MVP
         {
 
             List<string> _fileContent = new List<string>();
+           
+            string _sportName = "";
 
             // Read the file and display it line by line.  
             foreach (string line in System.IO.File.ReadLines(FilePath))
             {
                 _fileContent.Add(line);
-                AnalizeFile(line);
+                _sportName = _fileContent[0];
+                AnalizeFile(line, _sportName);
+                
 
             }
 
@@ -60,24 +68,65 @@ namespace MVP
 
 
 
+
         }
 
-        public void AnalizeFile(string line)
+        public void AnalizeFile(string line, string sportName)
         {
-            List<string> _matchTeams = new List<string>();
-            string[] _playerInfo ;
-            _playerInfo = line.Split(";");
            
-            PlayerInfo playerInfo = new PlayerInfo()
+            string[] _lineInfo = line.Split(';');
+            Sport _playerInfo = new Sport();
+           
+
+            if (_lineInfo.Length > 1)
             {
-                _playerName = _playerInfo[0],
-                _teamName= _playerInfo[1],
-                _score=1
-            };
 
-          _players.Add(playerInfo);
+                switch (sportName.ToUpper())
+                {
+                    case "BASKETBALL":
+                        {
 
-           
+                            _playerInfo = new Basketball()
+                            {
+                                PlayerName = _lineInfo[0],
+                                NickName = _lineInfo[1],
+                                Number = int.Parse(_lineInfo[2]),
+                                TeamName = _lineInfo[3],
+                                Position = _lineInfo[4],
+                                ScoredPoint = int.Parse(_lineInfo[5]),
+                                Rebound = int.Parse(_lineInfo[6]),
+                                Assist = int.Parse(_lineInfo[7]),    
+                                
+                                
+
+                            };
+
+                            _teamScore.Add(_playerInfo.TeamName, _playerInfo.sc);
+
+                            break;
+                        }
+
+
+                    case "HANDBALL":
+
+                        _playerInfo = new HANDBALL()
+                        {
+                            PlayerName = _lineInfo[0],
+                            NickName = _lineInfo[1],
+                            Number = int.Parse(_lineInfo[2]),
+                            TeamName = _lineInfo[3],
+                            Position = _lineInfo[4],
+                            GoalMade = int.Parse(_lineInfo[5]),
+                            GoalReceived = int.Parse(_lineInfo[6]),
+
+
+                        };
+                        break;
+
+                }
+            }
+
+
 
 
         }
@@ -90,12 +139,7 @@ namespace MVP
                 arrTeamsName.Add(item);
             }
         }
-       public class PlayerInfo 
-            {
-            public string _playerName;
-            public string _teamName;
-            public int _score;
-            }
+
 
     }
 }
