@@ -12,7 +12,7 @@ namespace MVP.Class
         public string NickName;
         public int Number;
         public string TeamName;
-      
+        public int Point;
         public string Position;
     }
 }

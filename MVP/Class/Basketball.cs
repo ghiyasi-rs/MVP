@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
@@ -15,7 +16,7 @@ namespace MVP.Class
         public int ScoredPoint;
         public int Rebound;
         public int Assist;
-
+       
         public int Score
         {
             get { return _score; }
@@ -25,7 +26,7 @@ namespace MVP.Class
 
             }
         }
-
+        
         private int  _score;
         public  int CalcuteScore()
         {
