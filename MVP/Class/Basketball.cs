@@ -10,25 +10,16 @@ namespace MVP.Class
 {
     public class Basketball : Sport
     {
-        
-
-
         public int ScoredPoint;
         public int Rebound;
         public int Assist;
-       
-        public int Score
-        {
-            get { return _score; }
-            set
-            {
-                _score = CalcuteScore();
 
-            }
+        public override int Score
+        {
+            get { return CalcuteScore(); }
         }
-        
-        private int  _score;
-        public  int CalcuteScore()
+                
+        public int CalcuteScore()
         {
             int _sumPlayerScore = 0;
             switch (Position)
@@ -55,8 +46,8 @@ namespace MVP.Class
                     }
 
             }
-           return _sumPlayerScore;
-          
+            return _sumPlayerScore;
+
         }
     }
 }
