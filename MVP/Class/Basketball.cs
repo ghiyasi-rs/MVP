@@ -5,10 +5,11 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
+using static System.Windows.Forms.LinkLabel;
 
 namespace MVP.Class
 {
-    public class Basketball : Sport
+    public class BASKETBALL : Sport
     {
         public int ScoredPoint;
         public int Rebound;
@@ -16,10 +17,10 @@ namespace MVP.Class
 
         public override int Score
         {
-            get { return CalcuteScore(); }
+            get { return CalcutePlayerScore(); }
         }
-                
-        public int CalcuteScore()
+
+        public int CalcutePlayerScore()
         {
             int _sumPlayerScore = 0;
             switch (Position)
@@ -48,6 +49,37 @@ namespace MVP.Class
             }
             return _sumPlayerScore;
 
+        }
+
+        public List<BASKETBALL> GetWinnerTeam(List<BASKETBALL> _playerInfoList)
+        {
+
+            var result = _playerInfoList
+               .GroupBy(x => new { x.TeamName })
+               .Select(x => new Sport
+               {
+                   TeamName = x.First().TeamName,
+                   Score = x.Sum(y => Convert.ToInt32(y.ScoredPoint))
+               }).OrderByDescending(s=>s.Score);
+
+
+            foreach (var item in _playerInfoList.Where(t => t.TeamName == result.Select(t => t.TeamName).FirstOrDefault()))
+            {
+                item.Score = 10;
+            }
+            return _playerInfoList;
+        }
+
+        public Dictionary<string,int> GetMachBestPlayer (List<Sport> _playerInfoList)
+        {
+            Dictionary<string, int> result = new Dictionary<string, int>();
+            var maxScorePlayer = _playerInfoList
+                .Where(l => l.Score == _playerInfoList.Max(l => l.Score)).Select(p=>p.PlayerName).FirstOrDefault();
+            var maxScore = _playerInfoList
+                .Where(l => l.Score == _playerInfoList.Max(l => l.Score)).Select(p => p.Score).FirstOrDefault();
+
+            result[maxScorePlayer] = maxScore;
+            return result;
         }
     }
 }

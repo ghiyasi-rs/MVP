@@ -1,6 +1,7 @@
 ﻿using MVP.Class;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -15,9 +16,12 @@ namespace MVP
     public partial class MVP : Form
     {
         private Dictionary<string, int> _teamScore = new Dictionary<string, int>();
+        private List<Dictionary<string, int>> _bestPlayers = new List<Dictionary<string, int>>();
 
         private Dictionary<string, Dictionary<string, int>> _playersInfo = new Dictionary<string, Dictionary<string, int>>();
-        public List<Sport> _playerInfo;
+        public List<Sport> _playerInfoList;
+        public Sport _playerInfo;
+        public FileValidation _fileValidation = new FileValidation();
         public MVP()
         {
             InitializeComponent();
@@ -25,7 +29,7 @@ namespace MVP
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            _playersInfo.Clear();
             OpenFileDialog choofdlog = new OpenFileDialog();
             choofdlog.Filter = "All Files (*.*)|*.*";
             choofdlog.FilterIndex = 1;
@@ -42,29 +46,40 @@ namespace MVP
             foreach (var item in choofdlog.FileNames)
             {
 
-                ReadFile2(item);
-                GetWinnerTeam(_playerInfo);
+                bool _isValid = _fileValidation.IsValidFile(item);
+                if (_isValid)
+                {
+                    ReadFile2(item);
+                    AnalizeFile2(_playerInfoList);
 
+                }
 
 
             }
 
-            foreach (var item in _playersInfo)
-            {
-                Dictionary<string, int> t = _playersInfo[item.Key.ToString()];
-                string[] row = { item.Key.ToString(), GetTeamSumScore(t).ToString(), GetTeamBestPlayer(t).ToString(), GetTeamBestPlayerScore(t).ToString() };
-                dataGridView1.Rows.Add(row);
+            GetMvp();
 
-            }
+
+
+            //foreach (var item in _playersInfo)
+            //{
+            //    Dictionary<string, int> t = _playersInfo[item.Key.ToString()];
+
+            //    string[] row = { item.Key.ToString(), GetTeamSumScore(t).ToString(), GetTeamBestPlayer(t).ToString(), GetTeamBestPlayerScore(t).ToString() };
+            //    dataGridView1.Rows.Add(row);
+
+            //}
+
+
 
         }
 
-        public Sport ReadFile2(string FilePath)
+        public List<Sport> ReadFile2(string FilePath)
         {
             List<string> _fileContent = new List<string>();
             string[] _lineInfo;
             string _sportName = "";
-
+            Sport _player;
 
             // Read the file and display it line by line.  
             foreach (string line in System.IO.File.ReadLines(FilePath))
@@ -79,9 +94,11 @@ namespace MVP
                     {
                         case "BASKETBALL":
                             {
-                                _playerInfo = new Basketball()
+                                List<BASKETBALL> _basketBallPlayers = new List<BASKETBALL>();
+                                _playerInfoList = new List<Sport>();
+                                var _players = new BASKETBALL()
                                 {
-                                    SportName=_sportName,
+                                    SportName = _sportName,
                                     PlayerName = _lineInfo[0],
                                     NickName = _lineInfo[1],
                                     Number = int.Parse(_lineInfo[2]),
@@ -92,29 +109,19 @@ namespace MVP
                                     Assist = int.Parse(_lineInfo[7]),
                                 };
 
-                                _playerInfo.Add(_playerInfo);
-                                //Dictionary<string, int> _playerScore = new Dictionary<string, int>();
-                                //_playerScore.Add(_playerInfo.PlayerName, _playerInfo.Score);
+
+                                _playerInfoList.Add(_players);
 
 
-                                //if (!_playersInfo.ContainsKey(_playerInfo.TeamName))
 
-                                //    _playersInfo.Add(_playerInfo.TeamName, _playerScore);
 
-                                //else
-                                //{
-                                //    _playersInfo[_playerInfo.TeamName].Add(_playerInfo.PlayerName, _playerInfo.Score);
-
-                                //}
-
-                               
                                 break;
                             }
 
 
                         case "HANDBALL":
 
-                            _playerInfo = new HANDBALL()
+                            _player = new HANDBALL()
                             {
                                 SportName = _sportName,
                                 PlayerName = _lineInfo[0],
@@ -127,7 +134,7 @@ namespace MVP
 
 
                             };
-                            
+                            _playerInfoList.Add(_player);
                             break;
 
                     }
@@ -135,7 +142,7 @@ namespace MVP
 
 
             }
-            return _playerInfo;
+            return _playerInfoList;
 
         }
 
@@ -158,7 +165,79 @@ namespace MVP
 
 
         }
+        public void AnalizeFile2(List<Sport> _playerInfoList)
+        {
 
+
+
+            Sport _playerInfo;
+            var sportName = _playerInfoList[0].SportName;
+
+
+            foreach (var item in _playerInfoList)
+            {
+                switch (sportName.ToUpper())
+                {
+                    case "BASKETBALL":
+                        {
+                            _playerInfo = new BASKETBALL()
+                            {
+                                PlayerName = item.PlayerName,
+                                NickName = item.NickName,
+                                Number = item.Number,
+                                TeamName = item.TeamName,
+                                Position = item.Position,
+                                //ScoredPoint = item.ScoredPoint,
+                                //Rebound = item.Rebound,
+                                //Assist = item.Assist,
+                            };
+
+                            Dictionary<string, int> _playerScore = new Dictionary<string, int>();
+                            _playerScore.Add(_playerInfo.PlayerName, _playerInfo.Score);
+
+
+                            if (!_playersInfo.ContainsKey(_playerInfo.TeamName))
+
+                                _playersInfo.Add(_playerInfo.TeamName, _playerScore);
+
+                            else
+                            {
+                                _playersInfo[_playerInfo.TeamName].Add(_playerInfo.PlayerName, _playerInfo.Score);
+
+                            }
+                            BASKETBALL bASKETBALL = new BASKETBALL();
+                            var _bestBasketball = bASKETBALL.GetMachBestPlayer(_playerInfoList);
+                            _bestPlayers.Add(_bestBasketball);
+
+
+                            break;
+                        }
+
+
+                    case "HANDBALL":
+
+                        //_playerInfo = new HANDBALL()
+                        //{
+                        //    PlayerName = _lineInfo[0],
+                        //    NickName = _lineInfo[1],
+                        //    Number = int.Parse(_lineInfo[2]),
+                        //    TeamName = _lineInfo[3],
+                        //    Position = _lineInfo[4],
+                        //    GoalMade = int.Parse(_lineInfo[5]),
+                        //    GoalReceived = int.Parse(_lineInfo[6]),
+
+
+                        //};
+                        break;
+
+                }
+            }
+
+
+
+
+
+        }
         public void AnalizeFile(string line, string sportName)
         {
 
@@ -174,7 +253,7 @@ namespace MVP
                 {
                     case "BASKETBALL":
                         {
-                            _playerInfo = new Basketball()
+                            _playerInfo = new BASKETBALL()
                             {
                                 PlayerName = _lineInfo[0],
                                 NickName = _lineInfo[1],
@@ -199,17 +278,9 @@ namespace MVP
                                 _playersInfo[_playerInfo.TeamName].Add(_playerInfo.PlayerName, _playerInfo.Score);
 
                             }
-
-                            if (!_teamScore.ContainsKey(_playerInfo.TeamName))
-
-                                _teamScore.Add(_playerInfo.TeamName, _playerInfo.ScoredPoint);
-
-                            else
-                            {
-                                _teamScore[_playerInfo.TeamName] += _playerInfo.ScoredPoint;
-
-                            }
-
+                            BASKETBALL bASKETBALL = new BASKETBALL();
+                            var _bestBasketball = bASKETBALL.GetMachBestPlayer(_playerInfoList);
+                            _bestPlayers.Add(_bestBasketball);
 
 
                             break;
@@ -273,25 +344,41 @@ namespace MVP
             return sumValueKey;
         }
 
-
         public string GetWinnerTeam(Sport playersInfo)
         {
             switch (playersInfo.SportName)
             {
                 case "BASKETBALL":
                     {
-                       
+
                         break;
                     }
 
 
                 case "HANDBALL":
 
-                   
+
                     break;
 
             }
             return "";
+        }
+
+        public void GetMvp()
+        {
+            if (_bestPlayers.Count > 0)
+            {
+                var results = _bestPlayers.SelectMany(d => d)
+                                .GroupBy(d => d.Key)
+                                .Select(g => new
+                                {
+                                    GroupName = g.Key,
+                                    MaxValue = g.Max(i => i.Value)
+                                });
+                lbl_MVP.Text = results.Select(p => p.GroupName).FirstOrDefault().ToString();
+            }
+
+
         }
     }
 }
