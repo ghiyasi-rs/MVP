@@ -12,7 +12,7 @@ namespace MVP.Class
         public int InitialRatingPoints;
         public int GoalMade;
         public int GoalReceived;
-
+        public int ValidFieldItem = 7;
         public int Score
         {
             get { return CalcuteScore(); }

@@ -19,6 +19,7 @@ namespace MVP.Class
             string sportName = "";
             string[] files;
             string[] line;
+            int ValidFieldItem;
             try
             {
 
@@ -42,19 +43,29 @@ namespace MVP.Class
                         return false;
 
                     if (sportName == "BASKETBALL")
+                    {
+                        BASKETBALL _basketBall = new BASKETBALL();
+                        ValidFieldItem = _basketBall.ValidFieldItem;
                         for (int i = 1; i < files.Length; i++)
                         {
                             line = files[i].Split(";");
-                            if (line.Length < 8)
+                            if (line.Length < ValidFieldItem)
                                 return false;
                         }
+                    }
+
                     if (sportName == "HANDBALL")
+                    {
+                        HANDBALL _basketBall = new HANDBALL();
+                        ValidFieldItem = _basketBall.ValidFieldItem;
                         for (int i = 1; i < files.Length; i++)
                         {
                             line = files[i].Split(";");
-                            if (line.Length < 7)
+                            if (line.Length < ValidFieldItem)
                                 return false;
                         }
+                    }
+                        
 
                 }
                 return true;

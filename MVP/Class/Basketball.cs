@@ -15,6 +15,7 @@ namespace MVP.Class
         public int Rebound;
         public int Assist;
 
+        public int ValidFieldItem = 8;
         public override int Score
         {
             get { return CalcutePlayerScore(); }
