@@ -15,56 +15,17 @@ namespace MVP
 {
     public partial class MVP : Form
     {
-        private Dictionary<string, int> _teamScore = new Dictionary<string, int>();
-        private List<Dictionary<string, int>> _bestPlayers = new List<Dictionary<string, int>>();
 
-        //private Dictionary<string, Dictionary<string, int>> _playersInfo = new Dictionary<string, Dictionary<string, int>>();
+        private List<Dictionary<string, int>> _bestPlayers = new List<Dictionary<string, int>>();
         public List<Match> _playerInfoList;
-        public Match _playerInfo;
+
         public FileValidation _fileValidation = new FileValidation();
         public MVP()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-
-            _bestPlayers.Clear();
-
-            //_playersInfo.Clear();
-            OpenFileDialog choofdlog = new OpenFileDialog();
-            choofdlog.Filter = "All Files (*.*)|*.*";
-            choofdlog.FilterIndex = 1;
-            choofdlog.Multiselect = true;
-
-            if (choofdlog.ShowDialog() == DialogResult.OK)
-            {
-                string sFileName = choofdlog.FileName;
-                string[] arrAllFiles = choofdlog.FileNames; //used when Multiselect = true           
-            }
-
-
-
-            foreach (var item in choofdlog.FileNames)
-            {
-
-                bool _isValid = _fileValidation.IsValidFile(item);
-                if (_isValid)
-                {
-                    ReadFile(item);
-                    AnalizeFile(_playerInfoList);
-
-                }
-
-
-            }
-
-            GetMvp();
-
-
-        }
+       
 
         public List<Match> ReadFile(string FilePath)
         {
@@ -199,6 +160,37 @@ namespace MVP
 
         }
 
+        private void btn_MVP_Click(object sender, EventArgs e)
+        {
 
+            _bestPlayers.Clear();
+
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "All Files (*.*)|*.*";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = true;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                foreach (var item in choofdlog.FileNames)
+                {
+
+                    bool _isValid = _fileValidation.IsValidFile(item);
+                    if (_isValid)
+                    {
+                        ReadFile(item);
+                        AnalizeFile(_playerInfoList);
+
+                    }
+                }
+            }
+
+
+
+
+
+            GetMvp();
+
+        }
     }
 }
