@@ -8,7 +8,7 @@ namespace MVP.Domain.Enum
 {
     public enum Sports
     {
-        BASKETBALL ,
+        BASKETBALL,
         HANDBALL,
 
     }

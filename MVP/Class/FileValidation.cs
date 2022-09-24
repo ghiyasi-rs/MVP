@@ -44,8 +44,8 @@ namespace MVP.Class
 
                     if (sportName == "BASKETBALL")
                     {
-                        BASKETBALL _basketBall = new BASKETBALL();
-                        ValidFieldItem = _basketBall.ValidFieldItem;
+                        Basketball _basketBall = new Basketball();
+                        ValidFieldItem = Basketball.ValidFieldItem;
                         for (int i = 1; i < files.Length; i++)
                         {
                             line = files[i].Split(";");
@@ -56,8 +56,8 @@ namespace MVP.Class
 
                     if (sportName == "HANDBALL")
                     {
-                        HANDBALL _basketBall = new HANDBALL();
-                        ValidFieldItem = _basketBall.ValidFieldItem;
+                        Handball _basketBall = new Handball();
+                        ValidFieldItem = Handball.ValidFieldItem;
                         for (int i = 1; i < files.Length; i++)
                         {
                             line = files[i].Split(";");
