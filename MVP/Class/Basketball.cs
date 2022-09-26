@@ -13,10 +13,10 @@ namespace MVP.Class
 {
     public class Basketball : Match
     {
-        public int ScoredPoint;
-        public int Rebound;
-        public int Assist;
-        public int Award;
+        public int ScoredPoint { get; set; }
+        public int Rebound { get; set; }
+        public int Assist { get; set; }
+        public int Award { get; set; }
 
         public const int ValidFieldItem = 8;
         public override int Score
@@ -79,7 +79,7 @@ namespace MVP.Class
             if (!result.Any())
                 return _basketBallList;
             else
-                return null;
+                return null; // Player cannot play in two team in match
         }
 
         public List<Basketball> GetWinnerTeam(List<Basketball> _playerInfoList)
@@ -103,8 +103,6 @@ namespace MVP.Class
             {
 
                 var _winnerTeam = result.OrderByDescending(s => s.Score).Select(t => t.TeamName).FirstOrDefault();
-
-
 
                 var _returnList = _playerInfoList.Where(w => w.TeamName == _winnerTeam).ToList();
                 _returnList.ForEach(s => s.Award = 10);

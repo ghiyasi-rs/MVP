@@ -73,11 +73,11 @@ namespace MVP.Class
             if (!result.Any())
                 return _handballList;
             else
-                return null;
+                return null;// Player cannot play in two team in match
 
 
 
-           
+
         }
 
         public List<Handball> GetWinnerTeam(List<Handball> _playerInfoList)
@@ -100,8 +100,6 @@ namespace MVP.Class
             {
 
                 var _winnerTeam = result.OrderByDescending(s => s.Score).Select(t => t.TeamName).FirstOrDefault();
-
-
 
                 var _returnList = _playerInfoList.Where(w => w.TeamName == _winnerTeam).ToList();
                 _returnList.ForEach(s => s.Award = 10);

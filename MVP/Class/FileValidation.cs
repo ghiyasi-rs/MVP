@@ -12,7 +12,6 @@ namespace MVP.Class
 
     public class FileValidation
     {
-
         public bool IsValidFile(string FilePath)
         {
 
@@ -27,12 +26,12 @@ namespace MVP.Class
                 if (FilePath != null)
                 {
                     if (!File.Exists(FilePath))
-                        return false;
+                        return false; //file not found
 
 
 
                     if (Path.GetExtension(FilePath) != ".txt")
-                        return false;
+                        return false;// file format not valid
                     else
                     {
                         files = File.ReadAllLines(FilePath);
@@ -40,7 +39,7 @@ namespace MVP.Class
                     }
 
                     if (!Enum.IsDefined(typeof(Sports), sportName))
-                        return false;
+                        return false; // sport name not valid
 
                     if (sportName == "BASKETBALL")
                     {
@@ -50,7 +49,7 @@ namespace MVP.Class
                         {
                             line = files[i].Split(";");
                             if (line.Length < ValidFieldItem)
-                                return false;
+                                return false; // item in line not valid
                         }
                     }
 
@@ -72,7 +71,7 @@ namespace MVP.Class
             }
             catch
             {
-                return false;
+                return false; // error
             }
         }
     }
