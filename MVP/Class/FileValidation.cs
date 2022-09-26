@@ -51,7 +51,7 @@ namespace MVP.Class
 
                     if (sportName == "HANDBALL")
                     {                        
-                        ValidFieldItem = Handball2.ValidFieldItem;
+                        ValidFieldItem = Handball.ValidFieldItem;
 
                         for (int i = 1; i < files.Length; i++)
                         {

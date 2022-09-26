@@ -53,7 +53,7 @@ namespace MVP.Class
 
                         case nameof(Sports.HANDBALL):
 
-                            var _handballPlayer = new Handball2()
+                            var _handballPlayer = new Handball()
                             {
                                 SportName = _sportName,
                                 PlayerName = _lineInfo[0],
@@ -94,7 +94,7 @@ namespace MVP.Class
                     }
                 case nameof(Sports.HANDBALL):
                     {
-                        Handball2 _handball = new Handball2();
+                        Handball _handball = new Handball();
                         var _list = _handball.GetListHandball(_playerInfoList);
                         if (_list != null)
                         {
