@@ -21,14 +21,11 @@ namespace MVP.Class
             int ValidFieldItem;
             try
             {
-
-
                 if (FilePath != null)
                 {
                     if (!File.Exists(FilePath))
                         return false; //file not found
-
-
+                    
 
                     if (Path.GetExtension(FilePath) != ".txt")
                         return false;// file format not valid
@@ -42,8 +39,7 @@ namespace MVP.Class
                         return false; // sport name not valid
 
                     if (sportName == "BASKETBALL")
-                    {
-                        Basketball _basketBall = new Basketball();
+                    {                        
                         ValidFieldItem = Basketball.ValidFieldItem;
                         for (int i = 1; i < files.Length; i++)
                         {
@@ -54,9 +50,9 @@ namespace MVP.Class
                     }
 
                     if (sportName == "HANDBALL")
-                    {
-                        Handball _basketBall = new Handball();
+                    {                        
                         ValidFieldItem = Handball.ValidFieldItem;
+
                         for (int i = 1; i < files.Length; i++)
                         {
                             line = files[i].Split(";");
@@ -64,10 +60,10 @@ namespace MVP.Class
                                 return false;
                         }
                     }
-                        
-
+                    return true;
                 }
-                return true;
+                else
+                return false;
             }
             catch
             {

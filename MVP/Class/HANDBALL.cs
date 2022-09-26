@@ -14,7 +14,6 @@ namespace MVP.Class
         public int GoalReceived;
         public int Award;
 
-
         public const int ValidFieldItem = 7;
         public override int Score
         {
@@ -75,9 +74,6 @@ namespace MVP.Class
             else
                 return null;// Player cannot play in two team in match
 
-
-
-
         }
 
         public List<Handball> GetWinnerTeam(List<Handball> _playerInfoList)
@@ -98,7 +94,6 @@ namespace MVP.Class
 
             else
             {
-
                 var _winnerTeam = result.OrderByDescending(s => s.Score).Select(t => t.TeamName).FirstOrDefault();
 
                 var _returnList = _playerInfoList.Where(w => w.TeamName == _winnerTeam).ToList();

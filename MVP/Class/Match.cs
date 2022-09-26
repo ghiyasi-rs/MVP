@@ -20,16 +20,14 @@ namespace MVP.Class
         public Dictionary<string, int> GetMachBestPlayer(List<Match> _playerInfoList)
         {
             Dictionary<string, int> result = new Dictionary<string, int>();
+          
+            var maxScore = _playerInfoList.Max(l => l.Score);
             var maxScorePlayer = _playerInfoList
-                .Where(l => l.Score == _playerInfoList.Max(l => l.Score)).Select(p => p.PlayerName).FirstOrDefault();
-            var maxScore = _playerInfoList
-                .Where(l => l.Score == _playerInfoList.Max(l => l.Score)).Select(p => p.Score).FirstOrDefault();
+                            .Where(l => l.Score == maxScore).Select(p => p.PlayerName).FirstOrDefault();
+            result.Add(maxScorePlayer, maxScore);
 
-            result[maxScorePlayer] = maxScore;
             return result;
         }
-    }
-
-    
+    }    
 
 }

@@ -69,7 +69,6 @@ namespace MVP.Class
 
 
             var _teams = _basketBallList.GroupBy(t=>t.TeamName).ToList();
-
             var _firstTeamPlayers = _basketBallList.Where(t => t.TeamName == _teams[0].Key.ToString()).Select(p => p.PlayerName).ToList();
             var _secondTeamPlayers = _basketBallList.Where(t => t.TeamName == _teams[1].Key.ToString()).Select(p => p.PlayerName).ToList();
 
@@ -101,17 +100,13 @@ namespace MVP.Class
 
             else
             {
-
                 var _winnerTeam = result.OrderByDescending(s => s.Score).Select(t => t.TeamName).FirstOrDefault();
 
                 var _returnList = _playerInfoList.Where(w => w.TeamName == _winnerTeam).ToList();
                 _returnList.ForEach(s => s.Award = 10);
 
                 return _returnList;
-            }    
-           
-
-
+            }      
 
         }
 

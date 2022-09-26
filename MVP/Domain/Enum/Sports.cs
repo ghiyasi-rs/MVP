@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace MVP.Domain.Enum
 {
-    public enum Sports
+    public  enum Sports
     {
         BASKETBALL,
         HANDBALL,
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MVP.Class;
+using MVP.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -17,129 +18,39 @@ namespace MVP
     {
 
         private List<Dictionary<string, int>> _bestPlayers = new List<Dictionary<string, int>>();
-        public List<Match> _playerInfoList;
+        private List<Match> _match;
+        private FileValidation _fileValidation = new FileValidation();
+        private FileOperations _fileOperations = new FileOperations();
 
-        public FileValidation _fileValidation = new FileValidation();
         public MVP()
         {
             InitializeComponent();
         }
-
-       
-
-        public List<Match> ReadFile(string FilePath)
+        
+        private void btn_MVP_Click(object sender, EventArgs e)
         {
-            List<string> _fileContent = new List<string>();
-            string[] _lineInfo;
-            string _sportName = "";
-            Match _player;
 
-            _playerInfoList = new List<Match>();
-            foreach (string line in System.IO.File.ReadLines(FilePath))
+            _bestPlayers.Clear();
+            
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "Text|*.txt";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = true;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
             {
-                _fileContent.Add(line);
-                _sportName = _fileContent[0];
-                _lineInfo = line.Split(';');
-                if (_lineInfo.Length > 1)
+                foreach (var file in choofdlog.FileNames)
                 {
-
-                    switch (_sportName.ToUpper())
+                    bool _isValid = _fileValidation.IsValidFile(file);
+                    if (_isValid)
                     {
-                        case "BASKETBALL":
-                            {
-
-
-                                var _players = new Basketball()
-                                {
-                                    SportName = _sportName,
-                                    PlayerName = _lineInfo[0],
-                                    NickName = _lineInfo[1],
-                                    Number = int.Parse(_lineInfo[2]),
-                                    TeamName = _lineInfo[3],
-                                    Position = _lineInfo[4],
-                                    ScoredPoint = int.Parse(_lineInfo[5]),
-                                    Rebound = int.Parse(_lineInfo[6]),
-                                    Assist = int.Parse(_lineInfo[7]),
-                                };
-
-
-                                _playerInfoList.Add(_players);
-
-
-
-
-                                break;
-                            }
-
-
-                        case "HANDBALL":
-
-                            _player = new Handball()
-                            {
-                                SportName = _sportName,
-                                PlayerName = _lineInfo[0],
-                                NickName = _lineInfo[1],
-                                Number = int.Parse(_lineInfo[2]),
-                                TeamName = _lineInfo[3],
-                                Position = _lineInfo[4],
-                                GoalMade = int.Parse(_lineInfo[5]),
-                                GoalReceived = int.Parse(_lineInfo[6]),
-
-
-                            };
-                            _playerInfoList.Add(_player);
-                            break;
-
+                        _match = _fileOperations.ReadFileContent(file);
+                        _bestPlayers=_fileOperations.AnalyzeFile(_match);
                     }
                 }
-
-
             }
-            return _playerInfoList;
-
-        }
-
-        public void AnalizeFile(List<Match> _playerInfoList)
-        {
-
-            var sportName = _playerInfoList[0].SportName;
-
-            switch (sportName.ToUpper())
-            {
-                case "BASKETBALL":
-                    {
-
-
-                        Basketball _basketball = new Basketball();
-                        var _list = _basketball.GetListBasketball(_playerInfoList);
-                        if (_list != null)
-                        {
-                            _basketball.GetWinnerTeam(_list);
-                             var _bestBasketball = _basketball.GetMachBestPlayer(_playerInfoList);
-                            _bestPlayers.Add(_bestBasketball);
-                        }
-
-
-                        break;
-                    }
-                case "HANDBALL":
-                    {
-
-
-                        Handball _handball = new Handball();
-                        var _list = _handball.GetListHandball(_playerInfoList);
-                        if (_list != null)
-                        {
-                            _handball.GetWinnerTeam(_list);
-                             var _bestHandball = _handball.GetMachBestPlayer(_playerInfoList);
-                            _bestPlayers.Add(_bestHandball);
-                        }
-                      
-
-                        break;
-                    }
-            }
-
+              
+            GetMvp();
 
         }
 
@@ -156,41 +67,8 @@ namespace MVP
                                 });
                 lbl_MVP.Text = results.Select(p => p.GroupName).FirstOrDefault().ToString();
             }
-
-
-        }
-
-        private void btn_MVP_Click(object sender, EventArgs e)
-        {
-
-            _bestPlayers.Clear();
-
-            OpenFileDialog choofdlog = new OpenFileDialog();
-            choofdlog.Filter = "All Files (*.*)|*.*";
-            choofdlog.FilterIndex = 1;
-            choofdlog.Multiselect = true;
-
-            if (choofdlog.ShowDialog() == DialogResult.OK)
-            {
-                foreach (var item in choofdlog.FileNames)
-                {
-
-                    bool _isValid = _fileValidation.IsValidFile(item);
-                    if (_isValid)
-                    {
-                        ReadFile(item);
-                        AnalizeFile(_playerInfoList);
-
-                    }
-                }
-            }
-
-
-
-
-
-            GetMvp();
-
+            else
+                MessageBox.Show("Can not find MVP.");
         }
     }
 }
