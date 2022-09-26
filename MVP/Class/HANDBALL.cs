@@ -86,6 +86,7 @@ namespace MVP.Class
                    TeamName = x.First().TeamName,
                    Score = x.Sum(y => Convert.ToInt32(y.GoalMade))
                }).ToList();
+
             if (result.Count() == 2 && result[0].Score == result[1].Score)
             {
                 return null; // match should have winner;
