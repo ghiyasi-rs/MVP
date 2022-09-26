@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MVP.Class
 {
 
-    public class Handball : Match
+    public class Handball2 : Match
     {
         public int InitialRatingPoints;
         public int GoalMade;
@@ -49,13 +49,13 @@ namespace MVP.Class
 
         }
 
-        public List<Handball> GetListHandball(List<Match> _sportList)
+        public List<Handball2> GetListHandball(List<Match> _sportList)
         {
-            var _handballList = new List<Handball>();
+            var _handballList = new List<Handball2>();
 
             _sportList.ForEach(match =>
             {
-                var _handball = (Handball)match;
+                var _handball = (Handball2)match;
 
                 _handballList.Add(_handball);
             });
@@ -76,7 +76,7 @@ namespace MVP.Class
 
         }
 
-        public List<Handball> GetWinnerTeam(List<Handball> _playerInfoList)
+        public List<Handball2> GetWinnerTeam(List<Handball2> _playerInfoList)
         {
 
             var result = _playerInfoList
